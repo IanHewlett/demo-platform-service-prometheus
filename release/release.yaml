@@ -1,0 +1,32 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+
+  sources:
+    - chart: prometheus
+      repoURL: https://prometheus-community.github.io/helm-charts
+      targetRevision: 25.4.0
+
+      helm:
+        valueFiles:
+          - $values/release/values.yaml
+
+    - repoURL: https://github.com/IanHewlett/demo-platform-service-prometheus.git
+      ref: values
+
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: istio-system
+
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true

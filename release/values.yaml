@@ -1,0 +1,35 @@
+kube-state-metrics:
+  enabled: false
+
+alertmanager:
+  enabled: false
+
+prometheus-node-exporter:
+  enabled: false
+
+prometheus-pushgateway:
+  enabled: false
+
+server:
+  fullnameOverride: prometheus
+
+  nodeSelector:
+    nodegroup: management-nodes
+
+  tolerations:
+    - key: "dedicated"
+      operator: "Equal"
+      value: management
+      effect: "NoSchedule"
+
+  strategy:
+    type: Recreate
+
+  service:
+    servicePort: 9090
+
+  podLabels:
+    sidecar.istio.io/inject: "false"
+
+  global:
+    scrape_interval: 1m
