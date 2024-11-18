@@ -13,6 +13,8 @@ prometheus-pushgateway:
 server:
   fullnameOverride: prometheus
 
+  replicaCount: 3
+
   nodeSelector:
     nodegroup: management-nodes
 
